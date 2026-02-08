@@ -1,204 +1,320 @@
-## QUERIES
-01 . Display employees who joined before 30-Jun-1980 or after 31-Dec-1981
+# EXPERIMENT:- 02
+#### QUERIES
+01 . Display Different Job Types (DISTINCT)
 ```sql
- SELECT*FROM EMPLOYEE
-WHERE HIREDATE < '1980-06-30'
-    OR HIREDATE > '1981-12-31';
-    -----------------------------------------
-+-------+--------+---------+------+------------+------+------+--------+
-| EMPNO | ENAME  | JOB     | MGR  | HIREDATE   | SAL  | COMM | DEPTNO |
-+-------+--------+---------+------+------------+------+------+--------+
-|  7788 | SCOTT  | ANALYST | 7566 | 1982-12-09 | 3000 | NULL |     40 |
-|  7876 | ADAMS  | CLERK   | 7788 | 1983-01-12 | 1100 | NULL |     20 |
-|  7934 | MILLER | CLERK   | 7782 | 1982-01-23 | 1300 | NULL |     10 |
-+-------+--------+---------+------+------------+------+------+--------+
+SELECT DISTINCT JOB
+FROM EMPLOYEE;
+-----------------------------------
++-----------+
+| JOB       |
++-----------+
+| CLERK     |
+| SALESMAN  |
+| MANAGER   |
+| ANALYST   |
+| PRESIDENT |
++-----------+
+
 ```
-02 . Display names of employees whose second alphabet is ‘A’
+02 . Employees Working in Department 30
+```sql
+SELECT * 
+FROM EMPLOYEE
+WHERE DEPTNO = 30;
+----------------------------------
++-------+--------+----------+------+------------+------+------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL  | COMM | DEPTNO |
++-------+--------+----------+------+------------+------+------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250 |  300 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500 |    0 |     30 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950 | NULL |     30 |
++-------+--------+----------+------+------------+------+------+--------+
+```
+03 . Job and Department Where DEPTNO > 20
+```sql
+SELECT JOB, DEPTNO
+FROM EMPLOYEE
+WHERE DEPTNO > 20;
+-----------------------------------------------
++----------+--------+
+| JOB      | DEPTNO |
++----------+--------+
+| SALESMAN |     30 |
+| SALESMAN |     30 |
+| SALESMAN |     30 |
+| MANAGER  |     30 |
+| ANALYST  |     40 |
+| SALESMAN |     30 |
+| CLERK    |     30 |
++----------+--------+
+```
+04 . All information of clerk as well manager of department 30
+```sql
+SELECT *
+FROM EMPLOYEE
+WHERE DEPTNO = 30
+AND (JOB = 'MANAGER' OR JOB = 'CLERK');
+---------------------------------------------------
++-------+-------+---------+------+------------+------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL  | COMM | DEPTNO |
++-------+-------+---------+------+------------+------+------+--------+
+|  7698 | BLAKE | MANAGER | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7900 | JAMES | CLERK   | 7698 | 1981-12-03 |  950 | NULL |     30 |
++-------+-------+---------+------+------------+------+------+--------+
+```
+05 . Display name,department and emp no of clerk
+```sql
+SELECT ENAME, EMPNO, DEPTNO
+FROM EMPLOYEE
+WHERE JOB = 'CLERK';
+---------------------------------------------
++--------+-------+--------+
+| ENAME  | EMPNO | DEPTNO |
++--------+-------+--------+
+| SMITH  |  7369 |     20 |
+| ADAMS  |  7876 |     20 |
+| JAMES  |  7900 |     30 |
+| MILLER |  7934 |     10 |
++--------+-------+--------+
+```
+06 . Managers Not in Department 30
+```sql
+SELECT *
+FROM EMPLOYEE
+WHERE JOB = 'MANAGER'
+AND DEPTNO <> 30;
+----------------------------------------------
++-------+-------+---------+------+------------+------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL  | COMM | DEPTNO |
++-------+-------+---------+------+------------+------+------+--------+
+|  7566 | JONES | MANAGER | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7782 | CLARK | MANAGER | 7839 | 1981-06-09 | 2450 | NULL |     20 |
++-------+-------+---------+------+------------+------+------+--------+
+```
+07 . list of all employee of dept 10 who are not manager or clerk
+```sql
+SELECT *
+FROM EMPLOYEE
+WHERE DEPTNO = 10
+AND JOB NOT IN ('MANAGER', 'CLERK');
+--------------------------------------------
+Empty set 
+```
+08 . Salary Between 1200 and 1400
+```sql
+SELECT ENAME, JOB, SAL
+FROM EMPLOYEE
+WHERE SAL BETWEEN 1200 AND 1400;
+-------------------------------------------
++--------+----------+------+
+| ENAME  | JOB      | SAL  |
++--------+----------+------+
+| WARD   | SALESMAN | 1250 |
+| MARTIN | SALESMAN | 1250 |
+| MILLER | CLERK    | 1300 |
++--------+----------+------+
+```
+09 . list name,department of employee who are clerk,analyst or salesman
+```sql
+SELECT ENAME, DEPTNO
+FROM EMPLOYEE
+WHERE JOB IN ('CLERK', 'ANALYST', 'SALESMAN');
+--------------------------------------------
++--------+--------+
+| ENAME  | DEPTNO |
++--------+--------+
+| SMITH  |     20 |
+| ALLEN  |     30 |
+| WARD   |     30 |
+| MARTIN |     30 |
+| SCOTT  |     40 |
+| TURNER |     30 |
+| ADAMS  |     20 |
+| JAMES  |     30 |
+| FORD   |     20 |
+| MILLER |     10 |
++--------+--------+
+```
+10 . list name and department of employee whose name start with M
+```sql
+SELECT ENAME, DEPTNO
+FROM EMPLOYEE
+WHERE ENAME LIKE 'M%';
+-----------------------------------------
++--------+--------+
+| ENAME  | DEPTNO |
++--------+--------+
+| MARTIN |     30 |
+| MILLER |     10 |
++--------+--------+
+```
+# EXPERIMENT:-03
+QUERIES
+
+01 . Names with Exactly 5 Characters (A___N)
+```sql
+SELECT ENAME, JOB, DEPTNO,ENAME
+FROM EMPLOYEE
+WHERE ENAME LIKE 'A___N';
+--------------------------------------
++----------+--------+-------+
+| JOB      | DEPTNO | ENAME |
++----------+--------+-------+
+| SALESMAN |     30 | ALLEN |
++----------+--------+-------+
+```
+02 . Salary of employee in descending order of dept 30
+```sql
+SELECT ENAME, JOB, SAL
+FROM EMPLOYEE
+WHERE DEPTNO = 30
+ORDER BY SAL DESC;
+----------------------------------------
++--------+----------+------+
+| ENAME  | JOB      | SAL  |
++--------+----------+------+
+| BLAKE  | MANAGER  | 2850 |
+| ALLEN  | SALESMAN | 1600 |
+| TURNER | SALESMAN | 1500 |
+| WARD   | SALESMAN | 1250 |
+| MARTIN | SALESMAN | 1250 |
+| JAMES  | CLERK    |  950 |
++--------+----------+------+
+```
+03 . List of employee name start with S
 ```sql
 SELECT ENAME
 FROM EMPLOYEE
-WHERE ENAME LIKE '_A%';
---------------------------------------------------+--------+
-| ENAME  |
-+--------+
-| WARD   |
-| MARTIN |
-| JAMES  |
-+--------+
-```
-03 . Display names of employees whose name is exactly five characters long
-```sql
-SELECT ENAME
-FROM EMPLOYEE
-WHERE LENGTH(ENAME) = 5;
-----------------------------------------------------
+WHERE ENAME LIKE 'S%';
+-------------------------------
 +-------+
 | ENAME |
 +-------+
 | SMITH |
-| ALLEN |
-| JONES |
-| BLAKE |
-| CLARK |
 | SCOTT |
-| ADAMS |
-| JAMES |
 +-------+
 ```
-04 . Display names of employees whose second last alphabet is ‘E’
+04 . Name ends with S
 ```sql
 SELECT ENAME
 FROM EMPLOYEE
-WHERE ENAME LIKE '%E_';
----------------------------------------------------
-+--------+
-| ENAME  |
-+--------+
-| ALLEN  |
-| JONES  |
-| TURNER |
-| JAMES  |
-| MILLER |
-+--------+
-```
-05 . Display names of employees who are NOT working as salesman, clerk or analyst
-```sql
-SELECT ENAME
-FROM EMPLOYEE
-WHERE JOB NOT IN ('SALESMAN', 'CLERK', 'ANALYST');
-------------------------------------------------------
+WHERE ENAME LIKE '%S';
+---------------------------------------
 +-------+
 | ENAME |
 +-------+
 | JONES |
-| BLAKE |
-| CLARK |
-| KING  |
+| ADAMS |
+| JAMES |
 +-------+
 ```
-06 . Display employee name and annual salary (SAL × 12), highest salary first
-```sql
-SELECT ENAME, (SAL * 12) AS ANNUAL_SALARY
+05 . Display the names of employees working in department number 10, 20, or 40 OR employees working as CLERK, SALESMAN, or ANALYST
+```sql 
+SELECT ENAME
 FROM EMPLOYEE
-ORDER BY ANNUAL_SALARY DESC;
---------------------------------------------
-+--------+---------------+
-| ENAME  | ANNUAL_SALARY |
-+--------+---------------+
-| KING   |         60000 |
-| SCOTT  |         36000 |
-| FORD   |         36000 |
-| JONES  |         35700 |
-| BLAKE  |         34200 |
-| CLARK  |         29400 |
-| ALLEN  |         19200 |
-| TURNER |         18000 |
-| MILLER |         15600 |
-| MARTIN |         15000 |
-| WARD   |         15000 |
-| ADAMS  |         13200 |
-| JAMES  |         11400 |
-| SMITH  |          9600 |
-+--------+---------------+
+WHERE DEPTNO IN (10, 20, 40)
+   OR JOB IN ('CLERK', 'SALESMAN', 'ANALYST');
+   ------------------------------------
+   +--------+
+| ENAME  |
++--------+
+| SMITH  |
+| ALLEN  |
+| WARD   |
+| JONES  |
+| MARTIN |
+| CLARK  |
+| SCOTT  |
+| KING   |
+| TURNER |
+| ADAMS  |
+| JAMES  |
+| FORD   |
+| MILLER |
++--------+
 ```
-07 . Display name, SAL, HRA, DA, PF and TOTAL SALARY
-HRA = 15% of SAL
-DA = 10% of SAL
-PF = 5% of SAL
-TOTAL SALARY = (SAL + HRA + DA) − PF
+06 . Display employee number and names for employees who earn commission
 ```sql
-SELECT 
-    ENAME,
-    SAL,
-    (SAL * 0.15) AS HRA,
-    (SAL * 0.10) AS DA,
-    (SAL * 0.05) AS PF,
-    (SAL + (SAL * 0.15) + (SAL * 0.10) - (SAL * 0.05)) AS TOTALSAL
+SELECT EMPNO, ENAME
 FROM EMPLOYEE
-ORDER BY TOTALSAL;
---------------------------------------------------------+--------+------+--------+--------+--------+----------+
-| ENAME  | SAL  | HRA    | DA     | PF     | TOTALSAL |
-+--------+------+--------+--------+--------+----------+
-| SMITH  |  800 | 120.00 |  80.00 |  40.00 |   960.00 |
-| JAMES  |  950 | 142.50 |  95.00 |  47.50 |  1140.00 |
-| ADAMS  | 1100 | 165.00 | 110.00 |  55.00 |  1320.00 |
-| WARD   | 1250 | 187.50 | 125.00 |  62.50 |  1500.00 |
-| MARTIN | 1250 | 187.50 | 125.00 |  62.50 |  1500.00 |
-| MILLER | 1300 | 195.00 | 130.00 |  65.00 |  1560.00 |
-| TURNER | 1500 | 225.00 | 150.00 |  75.00 |  1800.00 |
-| ALLEN  | 1600 | 240.00 | 160.00 |  80.00 |  1920.00 |
-| CLARK  | 2450 | 367.50 | 245.00 | 122.50 |  2940.00 |
-| BLAKE  | 2850 | 427.50 | 285.00 | 142.50 |  3420.00 |
-| JONES  | 2975 | 446.25 | 297.50 | 148.75 |  3570.00 |
-| FORD   | 3000 | 450.00 | 300.00 | 150.00 |  3600.00 |
-| SCOTT  | 3000 | 450.00 | 300.00 | 150.00 |  3600.00 |
-| KING   | 5000 | 750.00 | 500.00 | 250.00 |  6000.00 |
-+--------+------+--------+--------+--------+----------+
+WHERE COMM IS NOT NULL
+AND COMM > 0;
+-----------------------------
++-------+--------+
+| EMPNO | ENAME  |
++-------+--------+
+|  7499 | ALLEN  |
+|  7521 | WARD   |
+|  7654 | MARTIN |
++-------+--------+
 ```
-08 . Update salary by 10% for employees NOT eligible for commission
+07 . Display employee number and total salary for each employee
 ```sql
-UPDATE EMPLOYEE
-SET SAL = SAL * 1.10
-WHERE COMM IS NULL OR COMM = 0;
-SELECT ENAME,SAL,COMM
+SELECT EMPNO, (SAL + IFNULL(COMM, 0)) AS TOTAL_SALARY
 FROM EMPLOYEE;
-----------------------------------------------------+--------+------+------+
-| ENAME  | SAL  | COMM |
-+--------+------+------+
-| SMITH  |  968 | NULL |
-| ALLEN  | 1600 |  300 |
-| WARD   | 1250 |  300 |
-| JONES  | 3600 | NULL |
-| MARTIN | 1250 | 1400 |
-| BLAKE  | 3449 | NULL |
-| CLARK  | 2965 | NULL |
-| SCOTT  | 3630 | NULL |
-| KING   | 6050 | NULL |
-| TURNER | 1815 |    0 |
-| ADAMS  | 1331 | NULL |
-| JAMES  | 1150 | NULL |
-| FORD   | 3630 | NULL |
-| MILLER | 1573 | NULL |
-+--------+------+------+
+-------------------------------------
++-------+--------------+
+| EMPNO | TOTAL_SALARY |
++-------+--------------+
+|  7369 |          800 |
+|  7499 |         1900 |
+|  7521 |         1550 |
+|  7566 |         2975 |
+|  7654 |         2650 |
+|  7698 |         2850 |
+|  7782 |         2450 |
+|  7788 |         3000 |
+|  7839 |         5000 |
+|  7844 |         1500 |
+|  7876 |         1100 |
+|  7900 |          950 |
+|  7902 |         3000 |
+|  7934 |         1300 |
++-------+--------------+
 ```
-09 . Display employees whose salary is more than 3000 after 20% increment
+08 . Display employee number and annual salary for each employee
 ```sql
-SELECT ENAME, SAL, (SAL * 1.20) AS UPDATED_SALARY
-FROM EMPLOYEE
-WHERE (SAL * 1.20) > 3000;
-------------------------------------------------+-------+------+----------------+
-| ENAME | SAL  | UPDATED_SALARY |
-+-------+------+----------------+
-| JONES | 3600 |        4320.00 |
-| BLAKE | 3449 |        4138.80 |
-| CLARK | 2965 |        3558.00 |
-| SCOTT | 3630 |        4356.00 |
-| KING  | 6050 |        7260.00 |
-| FORD  | 3630 |        4356.00 |
-+-------+------+----------------+
+SELECT EMPNO, (SAL * 12) AS ANNUAL_SALARY
+FROM EMPLOYEE;
+-------------------------------------
++-------+---------------+
+| EMPNO | ANNUAL_SALARY |
++-------+---------------+
+|  7369 |          9600 |
+|  7499 |         19200 |
+|  7521 |         15000 |
+|  7566 |         35700 |
+|  7654 |         15000 |
+|  7698 |         34200 |
+|  7782 |         29400 |
+|  7788 |         36000 |
+|  7839 |         60000 |
+|  7844 |         18000 |
+|  7876 |         13200 |
+|  7900 |         11400 |
+|  7902 |         36000 |
+|  7934 |         15600 |
++-------+---------------+
 ```
-10 . Display employees whose salary contains at least 3 digits
+09 . Display the names of all employees working as CLERK and drawing a salary more than 3000
 ```sql
-SELECT ENAME, SAL
+SELECT ENAME
 FROM EMPLOYEE
-WHERE SAL >= 100;
----------------------------
-+--------+------+
-| ENAME  | SAL  |
-+--------+------+
-| SMITH  |  968 |
-| ALLEN  | 1600 |
-| WARD   | 1250 |
-| JONES  | 3600 |
-| MARTIN | 1250 |
-| BLAKE  | 3449 |
-| CLARK  | 2965 |
-| SCOTT  | 3630 |
-| KING   | 6050 |
-| TURNER | 1815 |
-| ADAMS  | 1331 |
-| JAMES  | 1150 |
-| FORD   | 3630 |
-| MILLER | 1573 |
-+--------+------+
+WHERE JOB = 'CLERK'
+AND SAL > 3000;
+----------------------------------------
+Empty set
+```
+10 . Display the names of employees who are working as
+CLERK, SALESMAN, or ANALYST and drawing a salary more than 3000
+```sql
+SELECT ENAME
+FROM EMPLOYEE
+WHERE JOB IN ('CLERK', 'SALESMAN', 'ANALYST')
+AND SAL > 3000;
+-----------------------------------
+Empty set
 ```
